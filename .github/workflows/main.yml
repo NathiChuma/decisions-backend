@@ -1,3 +1,8 @@
 name: Create service account key file
-run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > serviceAccountKey.json
+on: [push]
 
+jobs:
+  my_job:
+    runs-on: ubuntu-latest
+    steps:
+      run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > serviceAccountKey.json
