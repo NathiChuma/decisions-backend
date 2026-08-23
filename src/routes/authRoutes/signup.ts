@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { db } from '../../firebase';
 import { User } from '../../types';
 
@@ -32,9 +33,14 @@ const signup = async (req: Request, res: Response): Promise<void> => {
 
     await userRef.set({ email, passwordHash, createdAt });
 
+    const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET as string, {
+      expiresIn: '7d',
+    });
+
     res.status(201).json({
       message: 'User created successfully',
       user: newUser,
+      token,
     });
 
   } catch (error) {
